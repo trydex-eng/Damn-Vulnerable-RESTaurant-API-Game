@@ -1,0 +1,23 @@
+name: API Scan with StackHawk
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ "main" ] 
+jobs:
+  hawkscan:
+    name: HawkScan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repo
+        uses: actions/checkout@v2
+      - name: Run HawkScan
+        id: run-hawkscan
+        uses: stackhawk/hawkscan-action@main
+        with:
+          apiKey: ${{ secrets.HAWK_API_KEY }}
+          upload-to-code-scanning: true
+        env:
+          SARIF_ARTIFACT: true
